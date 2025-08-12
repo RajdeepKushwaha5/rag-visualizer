@@ -1,7 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import { createServer } from 'http';
-import { Server } from 'socket.io';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import * as dotenv from 'dotenv';
@@ -13,21 +11,12 @@ import { GoogleGenerativeAIEmbeddings } from '@langchain/google-genai';
 import { Pinecone } from '@pinecone-database/pinecone';
 import { GoogleGenAI } from "@google/genai";
 
-dotenv.config({ path: '../.env' });
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const server = createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: process.env.NODE_ENV === 'production' ? false : "*",
-    methods: ["GET", "POST"]
-  }
-});
-
-const PORT = process.env.PORT || 3000;
 const isProduction = process.env.NODE_ENV === 'production';
 
 // Security middleware
@@ -526,55 +515,32 @@ function generateMockResponse(question, context = '') {
   return 'Based on the provided context about data structures and algorithms, I can help answer questions about arrays, search algorithms, hash tables, and time complexity analysis.';
 }
 
-// Enhanced error handling and graceful shutdown
+// Enhanced error handling
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error);
-  process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  process.exit(1);
 });
 
-process.on('SIGTERM', () => {
-  console.log('SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    console.log('Server closed');
-    process.exit(0);
-  });
-});
+// Initialize RAG on first request
+let ragInitialized = false;
 
-process.on('SIGINT', () => {
-  console.log('SIGINT received, shutting down gracefully');
-  server.close(() => {
-    console.log('Server closed');
-    process.exit(0);
-  });
-});
-
-// Initialize and start server with enhanced error handling
-async function startServer() {
-  try {
-    await initializeRAG();
-
-    server.listen(PORT, () => {
-      console.log(`🚀 RAG Visualizer Server running on http://localhost:${PORT}`);
-      console.log(`📚 Access the interactive learning platform at http://localhost:${PORT}`);
-      console.log(`🔒 Environment: ${process.env.NODE_ENV || 'development'}`);
-      console.log(`⚡ Features: ${embeddings ? '✅' : '❌'} Embeddings, ${pineconeIndex ? '✅' : '❌'} Vector DB`);
-
-      if (!process.env.GEMINI_API_KEY) {
-        console.warn('⚠️  GEMINI_API_KEY not found - running in demo mode');
-      }
-      if (!process.env.PINECONE_API_KEY) {
-        console.warn('⚠️  PINECONE_API_KEY not found - using mock data');
-      }
-    });
-  } catch (error) {
-    console.error('❌ Failed to start server:', error);
-    process.exit(1);
+async function ensureRAGInitialized() {
+  if (!ragInitialized) {
+    try {
+      await initializeRAG();
+      ragInitialized = true;
+      console.log('✅ RAG system initialized');
+    } catch (error) {
+      console.error('❌ Failed to initialize RAG:', error);
+    }
   }
 }
 
-startServer();
+// Export the Express app for Vercel
+export default async function handler(req, res) {
+  await ensureRAGInitialized();
+  return app(req, res);
+}
