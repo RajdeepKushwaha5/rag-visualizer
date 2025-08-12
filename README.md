@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🧠 RAG System Visualizer
 
 <div align="center">
