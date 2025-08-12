@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RAG System Visualizer - Learn How RAG Works</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Loading Screen -->
+      <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+          <div class="loading-spinner"></div>
+          <h2>Initializing RAG Visualizer</h2>
+          <p>Preparing your interactive learning experience...</p>
+          <div class="loading-progress">
+            <div class="progress-bar" id="progress-bar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Header -->
+      <header class="header">
+        <div class="header-content">
+          <h1><i class="fas fa-brain brain-icon"></i> RAG System Visualizer</h1>
+          <p class="subtitle">
+            Learn how Retrieval-Augmented Generation works through interactive
+            animations
+          </p>
+          <div class="header-stats">
+            <div class="stat-item">
+              <i class="fas fa-users"></i>
+              <span>Educational Platform</span>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-rocket"></i>
+              <span>Interactive Learning</span>
+            </div>
+            <div class="stat-item">
+              <i class="fas fa-brain"></i>
+              <span>AI-Powered</span>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Navigation -->
+      <nav class="nav-tabs">
+        <button
+          class="tab-btn active"
+          data-tab="overview"
+          aria-label="Overview tab"
+        >
+          <i class="fas fa-info-circle"></i>
+          <span>Overview</span>
+        </button>
+        <button
+          class="tab-btn"
+          data-tab="indexing"
+          aria-label="Document Indexing tab"
+        >
+          <i class="fas fa-file-alt"></i>
+          <span>Document Indexing</span>
+        </button>
+        <button
+          class="tab-btn"
+          data-tab="querying"
+          aria-label="Query Processing tab"
+        >
+          <i class="fas fa-search"></i>
+          <span>Query Processing</span>
+        </button>
+        <button
+          class="tab-btn"
+          data-tab="interactive"
+          aria-label="Interactive demo tab"
+        >
+          <i class="fas fa-comments"></i>
+          <span>Try It Live</span>
+        </button>
+      </nav>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-pane active">
+          <div class="section">
+            <h2>What is RAG?</h2>
+            <div class="rag-overview">
+              <div
+                class="overview-card"
+                data-aos="fade-up"
+                data-aos-delay="100"
+              >
+                <div class="card-icon">
+                  <i class="fas fa-search"></i>
+                </div>
+                <h3>Retrieval</h3>
+                <p>
+                  Find relevant information from a knowledge base using vector
+                  similarity search
+                </p>
+                <div class="card-highlight">Smart Search</div>
+              </div>
+              <div
+                class="overview-card"
+                data-aos="fade-up"
+                data-aos-delay="200"
+              >
+                <div class="card-icon">
+                  <i class="fas fa-plus-circle"></i>
+                </div>
+                <h3>Augmented</h3>
+                <p>
+                  Enhance the query with retrieved context to provide accurate
+                  information
+                </p>
+                <div class="card-highlight">Context Enhanced</div>
+              </div>
+              <div
+                class="overview-card"
+                data-aos="fade-up"
+                data-aos-delay="300"
+              >
+                <div class="card-icon">
+                  <i class="fas fa-brain"></i>
+                </div>
+                <h3>Generation</h3>
+                <p>
+                  Generate accurate responses using advanced language models
+                  with context
+                </p>
+                <div class="card-highlight">AI Powered</div>
+              </div>
+            </div>
+
+            <div class="rag-flow">
+              <h3>RAG Process Flow</h3>
+              <div class="flow-diagram">
+                <div class="flow-step" id="step1">
+                  <i class="fas fa-file-pdf"></i>
+                  <span>Document</span>
+                </div>
+                <div class="arrow">→</div>
+                <div class="flow-step" id="step2">
+                  <i class="fas fa-cut"></i>
+                  <span>Chunking</span>
+                </div>
+                <div class="arrow">→</div>
+                <div class="flow-step" id="step3">
+                  <i class="fas fa-vector-square"></i>
+                  <span>Embeddings</span>
+                </div>
+                <div class="arrow">→</div>
+                <div class="flow-step" id="step4">
+                  <i class="fas fa-database"></i>
+                  <span>Vector DB</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Document Indexing Tab -->
+        <div id="indexing" class="tab-pane">
+          <div class="section">
+            <h2>Document Indexing Process</h2>
+            <div class="process-container">
+              <div class="step-controls">
+                <button
+                  class="btn btn-primary"
+                  onclick="startIndexingDemo()"
+                  aria-label="Start indexing demonstration"
+                >
+                  <i class="fas fa-play"></i> Start Demo
+                </button>
+                <button
+                  class="btn btn-secondary"
+                  onclick="resetIndexingDemo()"
+                  aria-label="Reset indexing demonstration"
+                >
+                  <i class="fas fa-refresh"></i> Reset
+                </button>
+                <div class="demo-help">
+                  <i class="fas fa-info-circle"></i>
+                  <span
+                    >Click "Start Demo" to see how documents are processed into
+                    vectors</span
+                  >
+                </div>
+              </div>
+
+              <div class="indexing-stages">
+                <!-- Stage 1: Document Loading -->
+                <div class="stage" id="loading-stage">
+                  <h3>1. Document Loading</h3>
+                  <div class="document-container">
+                    <div class="document" id="pdf-doc">
+                      <i class="fas fa-file-pdf"></i>
+                      <span>DSA.pdf</span>
+                      <div class="document-content">
+                        Arrays are fundamental data structures... Binary trees
+                        provide efficient searching... Hash tables offer O(1)
+                        average access...
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Stage 2: Text Chunking -->
+                <div class="stage" id="chunking-stage">
+                  <h3>2. Text Chunking</h3>
+                  <div class="chunking-container">
+                    <div class="chunks-grid" id="chunks-grid">
+                      <!-- Chunks will be generated here -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Stage 3: Vector Embeddings -->
+                <div class="stage" id="embedding-stage">
+                  <h3>3. Vector Embeddings</h3>
+                  <div class="embedding-container">
+                    <div class="embedding-process">
+                      <div class="text-input">
+                        <span>"Arrays are fundamental..."</span>
+                      </div>
+                      <div class="arrow-down">↓</div>
+                      <div class="embedding-model">
+                        <i class="fas fa-brain"></i>
+                        <span>Embedding Model</span>
+                      </div>
+                      <div class="arrow-down">↓</div>
+                      <div class="vector-output">
+                        <div class="vector-visualization" id="vector-viz">
+                          <!-- Vector values will be shown here -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Stage 4: Vector Storage -->
+                <div class="stage" id="storage-stage">
+                  <h3>4. Vector Database Storage</h3>
+                  <div class="database-container">
+                    <div class="vector-db" id="vector-db">
+                      <h4>
+                        <i class="fas fa-database"></i> Pinecone Vector DB
+                      </h4>
+                      <div class="vectors-list" id="vectors-list">
+                        <!-- Stored vectors will appear here -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Query Processing Tab -->
+        <div id="querying" class="tab-pane">
+          <div class="section">
+            <h2>Query Processing & Retrieval</h2>
+            <div class="query-container">
+              <div class="query-input-section">
+                <div class="input-wrapper">
+                  <input
+                    type="text"
+                    id="user-query"
+                    placeholder="Ask a question about DSA..."
+                    value="What is the time complexity of binary search?"
+                    aria-label="Enter your question about data structures and algorithms"
+                  />
+                  <div class="input-suggestions">
+                    <span
+                      class="suggestion"
+                      onclick="setQuery('What is the time complexity of binary search?')"
+                      >Binary Search</span
+                    >
+                    <span
+                      class="suggestion"
+                      onclick="setQuery('How do hash tables work?')"
+                      >Hash Tables</span
+                    >
+                    <span
+                      class="suggestion"
+                      onclick="setQuery('Explain merge sort algorithm')"
+                      >Merge Sort</span
+                    >
+                  </div>
+                </div>
+                <button
+                  class="btn btn-primary"
+                  onclick="startQueryDemo()"
+                  aria-label="Process the query"
+                >
+                  <i class="fas fa-search"></i> Process Query
+                </button>
+              </div>
+
+              <div class="query-stages">
+                <!-- Stage 1: Query Embedding -->
+                <div class="query-stage" id="query-embedding-stage">
+                  <h3>1. Query Vectorization</h3>
+                  <div class="query-embedding-viz">
+                    <div class="query-text" id="query-text">
+                      "What is the time complexity of binary search?"
+                    </div>
+                    <div class="arrow-right">→</div>
+                    <div class="query-vector" id="query-vector">
+                      <!-- Query vector visualization -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Stage 2: Similarity Search -->
+                <div class="query-stage" id="similarity-stage">
+                  <h3>2. Similarity Search</h3>
+                  <div class="similarity-container">
+                    <div class="query-vector-display">Query Vector</div>
+                    <div class="similarity-search">
+                      <div class="stored-vectors" id="stored-vectors">
+                        <!-- Stored vectors with similarity scores -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Stage 3: Context Retrieval -->
+                <div class="query-stage" id="retrieval-stage">
+                  <h3>3. Context Retrieval</h3>
+                  <div class="retrieved-context" id="retrieved-context">
+                    <!-- Top matching chunks will be displayed -->
+                  </div>
+                </div>
+
+                <!-- Stage 4: Response Generation -->
+                <div class="query-stage" id="generation-stage">
+                  <h3>4. Response Generation</h3>
+                  <div class="generation-container">
+                    <div class="context-input">
+                      <h4>Context + Query</h4>
+                      <div class="combined-input" id="combined-input">
+                        <!-- Combined context and query -->
+                      </div>
+                    </div>
+                    <div class="arrow-right">→</div>
+                    <div class="llm-processing">
+                      <i class="fas fa-brain"></i>
+                      <span>Gemini LLM</span>
+                    </div>
+                    <div class="arrow-right">→</div>
+                    <div class="final-response" id="final-response">
+                      <!-- Generated response -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Tab -->
+        <div id="interactive" class="tab-pane">
+          <div class="section">
+            <h2>Try RAG System Live</h2>
+            <div class="interactive-container">
+              <div class="chat-interface">
+                <div class="chat-messages" id="chat-messages">
+                  <div class="message bot-message">
+                    <i class="fas fa-robot"></i>
+                    <span
+                      >Hello! I'm a RAG-powered DSA assistant. Ask me anything
+                      about data structures and algorithms!</span
+                    >
+                  </div>
+                </div>
+                <div class="chat-input-container">
+                  <input
+                    type="text"
+                    id="chat-input"
+                    placeholder="Ask about arrays, trees, algorithms..."
+                    aria-label="Enter your question for the AI assistant"
+                  />
+                  <button
+                    onclick="sendMessage()"
+                    class="btn btn-primary"
+                    title="Send message"
+                    aria-label="Send your message"
+                  >
+                    <i class="fas fa-paper-plane"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="process-monitor">
+                <h3>Process Monitor</h3>
+                <div class="monitor-steps">
+                  <div class="monitor-step" id="monitor-embedding">
+                    <i class="fas fa-vector-square"></i>
+                    <span>Query Embedding</span>
+                    <div class="status idle">Idle</div>
+                  </div>
+                  <div class="monitor-step" id="monitor-search">
+                    <i class="fas fa-search"></i>
+                    <span>Vector Search</span>
+                    <div class="status idle">Idle</div>
+                  </div>
+                  <div class="monitor-step" id="monitor-retrieval">
+                    <i class="fas fa-download"></i>
+                    <span>Context Retrieval</span>
+                    <div class="status idle">Idle</div>
+                  </div>
+                  <div class="monitor-step" id="monitor-generation">
+                    <i class="fas fa-brain"></i>
+                    <span>Response Generation</span>
+                    <div class="status idle">Idle</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-wave">
+          <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path
+              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+            ></path>
+          </svg>
+        </div>
+
+        <div class="footer-main">
+          <div class="footer-left">
+            <div class="developer-info">
+              <div class="developer-avatar">
+                <i class="fas fa-user-circle"></i>
+              </div>
+              <div class="developer-details">
+                <h3 class="developer-name">Rajdeep Singh Kushwaha</h3>
+                <p class="developer-title">
+                  Full Stack Developer & AI Enthusiast
+                </p>
+                <p class="developer-description">
+                  Passionate about creating interactive educational experiences
+                  and exploring the frontiers of AI technology. Building tools
+                  that make complex concepts accessible to everyone.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-right">
+            <div class="social-links">
+              <h4>Connect with me</h4>
+              <div class="social-icons">
+                <a
+                  href="mailto:rajdeepsingh10789@gmail.com"
+                  class="social-link gmail"
+                  aria-label="Send email to Rajdeep"
+                >
+                  <i class="fas fa-envelope"></i>
+                  <span class="tooltip">Gmail</span>
+                </a>
+                <a
+                  href="https://x.com/rajdeeptwts"
+                  target="_blank"
+                  rel="noopener"
+                  class="social-link twitter"
+                  aria-label="Follow on X (Twitter)"
+                >
+                  <i class="fab fa-x-twitter"></i>
+                  <span class="tooltip">X (Twitter)</span>
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/rajdeep-singh-b658a833a/"
+                  target="_blank"
+                  rel="noopener"
+                  class="social-link linkedin"
+                  aria-label="Connect on LinkedIn"
+                >
+                  <i class="fab fa-linkedin-in"></i>
+                  <span class="tooltip">LinkedIn</span>
+                </a>
+                <a
+                  href="https://medium.com/@rajdeep01"
+                  target="_blank"
+                  rel="noopener"
+                  class="social-link medium"
+                  aria-label="Read articles on Medium"
+                >
+                  <i class="fab fa-medium-m"></i>
+                  <span class="tooltip">Medium</span>
+                </a>
+                <a
+                  href="https://github.com/RajdeepKushwaha5"
+                  target="_blank"
+                  rel="noopener"
+                  class="social-link github"
+                  aria-label="View GitHub profile"
+                >
+                  <i class="fab fa-github"></i>
+                  <span class="tooltip">GitHub</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="footer-stats">
+              <div class="stat-card">
+                <i class="fas fa-code"></i>
+                <div class="stat-info">
+                  <span class="stat-number">100+</span>
+                  <span class="stat-label">Projects</span>
+                </div>
+              </div>
+              <div class="stat-card">
+                <i class="fas fa-heart"></i>
+                <div class="stat-info">
+                  <span class="stat-number">∞</span>
+                  <span class="stat-label">Passion</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <div class="footer-divider"></div>
+          <div class="footer-copyright">
+            <p>
+              &copy; 2025 Rajdeep Singh Kushwaha. Made with
+              <i class="fas fa-heart heart-beat"></i> for the AI community.
+            </p>
+            <p class="footer-tech">Built with HTML, CSS, JavaScript & AI 🚀</p>
+          </div>
+        </div>
+
+        <div class="floating-particles">
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+          <div class="particle"></div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
